@@ -28,7 +28,9 @@ abstract class DynamicAppKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load($this->getDynamicBundlesConfigurationFile());
+        if(is_readable($this->getDynamicBundlesConfigurationFile())) {
+            $loader->load($this->getDynamicBundlesConfigurationFile());
+        }
     }
     
     /**
