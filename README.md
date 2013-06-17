@@ -1,4 +1,4 @@
-symfony-bundle
-==============
+project-symfony-dynamic-bundle
+==============================
 
-A skeleton for an empty Symfony 2 Bundle
+WIP
