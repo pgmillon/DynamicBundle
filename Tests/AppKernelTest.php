@@ -13,10 +13,10 @@ class AppKernelTest extends DynamicAppKernel
 {
     protected $cacheDir;
 
-    public function __construct($env='test', $cacheDir)
+    public function __construct($env='test', $cacheDir, $debug = true)
     {
+        parent::__construct($env, $debug);
         $this->cacheDir = $cacheDir;
-        parent::__construct($env, true);
     }
 
     public function setDynamicBundlesConfigurationFile($dynamicBundlesConfigurationFile)
