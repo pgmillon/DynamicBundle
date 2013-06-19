@@ -24,7 +24,7 @@
   "autoload": {
     "psr-0": {
       "IneatConseil\\DynamicBundle": "",
-      "Acme": "Tests/Fixtures/src"
+      "Acme": ["Tests/Fixtures/src/", "Tests/Fixtures/app/dynamicBundles"]
     }
   },
   "target-dir": "IneatConseil/DynamicBundle"

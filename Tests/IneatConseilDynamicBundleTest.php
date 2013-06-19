@@ -73,6 +73,16 @@ class IneatConseilDynamicBundleTest extends WebTestCase
     /**
      * @test
      */
+    public function iCanListAvailableBundles()
+    {
+        $bundles = $this->getBundleService()->getAvailableBundles();
+        $this->assertContains('Acme\SimpleBundle\AcmeSimpleBundle', $bundles);
+        $this->assertContains('Acme\Simple2Bundle\AcmeSimple2Bundle', $bundles);
+    }
+    
+    /**
+     * @test
+     */
     public function iCanHaveADynamicBundle()
     {
         $bundles = $this->getBundleService()->getActivatedBundles();

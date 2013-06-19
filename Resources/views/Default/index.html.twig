@@ -1,1 +1,13 @@
-Hello {{ name }}!
+{% trans %}Available bundles :{% endtrans %}
+<ul>
+  {% for bundle in availableBundles %}
+    <li>{{ bundle }}</li>
+  {% endfor %}
+</ul>
+
+{% trans %}Activated bundles :{% endtrans %}
+<ul>
+  {% for bundle in activatedBundles %}
+    <li>{{ bundle }}</li>
+  {% endfor %}
+</ul>

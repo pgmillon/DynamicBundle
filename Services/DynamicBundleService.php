@@ -2,6 +2,10 @@
 
 namespace IneatConseil\DynamicBundle\Services;
 
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 /**
  * Description of DynamicBundleService
  *
@@ -11,11 +15,11 @@ class DynamicBundleService
 {
     /**
      *
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var ContainerInterface
      */
     protected $container;
 
-    function __construct(\Symfony\Component\DependencyInjection\ContainerInterface $container)
+    function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -29,11 +33,25 @@ class DynamicBundleService
     {
         return $this->container->getParameter('dynamic.bundles');
     }
+    
+    public function getDynamicBundlesDir()
+    {
+        return $this->container->getParameter('dynamic.bundles_dir');
+    }
 
     public function getAvailableBundles()
     {
-        $finder = new \Symfony\Component\Finder\Finder();
-        $finder->name('*Bundle.php')->in(__DIR__);
-        return array();
+        $bundles = [];
+        $bundlesDir = $this->getDynamicBundlesDir();
+        $filesystem = new Filesystem();
+        $finder = new Finder();
+        $finder->name('*Bundle.php')->in($bundlesDir);
+        foreach($finder as $file) {
+            /* @var $file \SplFileInfo */
+            $className = $file->getBasename('.php');
+            $relativePath = $filesystem->makePathRelative($file->getPath(), $bundlesDir);
+            $bundles[] = str_replace('/', '\\', trim($relativePath, '/')).'\\'.$className;
+        }
+        return $bundles;
     }
 }
