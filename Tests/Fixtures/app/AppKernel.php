@@ -13,9 +13,13 @@ namespace {
                 new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
                 new Symfony\Bundle\SecurityBundle\SecurityBundle(),
                 new Symfony\Bundle\TwigBundle\TwigBundle(),
+                new Symfony\Bundle\MonologBundle\MonologBundle(),
+                new Symfony\Bundle\AsseticBundle\AsseticBundle(),
+                new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
                 new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle(),
                 new Sensio\Bundle\DistributionBundle\SensioDistributionBundle(),
                 new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle(),
+                new IneatConseil\DynamicBundle\IneatConseilDynamicBundle(),
             );
 
             return $bundles;
