@@ -17,6 +17,12 @@ class IneatConseilDynamicBundleTest extends WebTestCase
      * @var \Symfony\Component\DependencyInjection\Container
      */
     protected $container;
+    
+    /**
+     *
+     * @var \IneatConseil\DynamicBundle\Services\DynamicBundleService
+     */
+    protected $bundleService;
     protected $acmeSimpleBundleFQDN = 'Acme\SimpleBundle\AcmeSimpleBundle';
     protected $acmeSimpleBundle2FQDN = 'Acme\SimpleBundle2\AcmeSimpleBundle2';
 
@@ -27,6 +33,7 @@ class IneatConseilDynamicBundleTest extends WebTestCase
         static::createClient();
 
         $this->setContainer(static::$kernel->getContainer());
+        $this->setBundleService($this->getContainer()->get('dynamic_bundle_service'));
 
         $cacheDir = $this->getContainer()->getParameter('kernel.cache_dir');
         $cacheClearer = $this->getContainer()->get('cache_clearer');
@@ -37,6 +44,15 @@ class IneatConseilDynamicBundleTest extends WebTestCase
 
     /**
      * 
+     * @param \Symfony\Component\DependencyInjection\Container $container
+     */
+    public function setContainer($container)
+    {
+        $this->container = $container;
+    }
+    
+    /**
+     * 
      * @return \Symfony\Component\DependencyInjection\Container
      */
     public function getContainer()
@@ -44,13 +60,14 @@ class IneatConseilDynamicBundleTest extends WebTestCase
         return $this->container;
     }
 
-    /**
-     * 
-     * @param \Symfony\Component\DependencyInjection\Container $container
-     */
-    public function setContainer($container)
+    public function getBundleService()
     {
-        $this->container = $container;
+        return $this->bundleService;
+    }
+
+    public function setBundleService(\IneatConseil\DynamicBundle\Services\DynamicBundleService $bundleService)
+    {
+        $this->bundleService = $bundleService;
     }
 
     /**
@@ -58,7 +75,7 @@ class IneatConseilDynamicBundleTest extends WebTestCase
      */
     public function iCanHaveADynamicBundle()
     {
-        $bundles = $this->getContainer()->getParameter('dynamic.bundles');
+        $bundles = $this->getBundleService()->getActivatedBundles();
         $this->assertNotNull($bundles);
         $this->assertContains('Acme\SimpleBundle\AcmeSimpleBundle', $bundles);
     }
@@ -69,7 +86,7 @@ class IneatConseilDynamicBundleTest extends WebTestCase
     public function iCanAddADynamicBundle()
     {
         $bundles = [
-            "dynamic.bundles" => $this->getContainer()->getParameter('dynamic.bundles')
+            "dynamic.bundles" => $this->getBundleService()->getActivatedBundles()
         ];
 
         $cacheDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid(mt_rand());
@@ -79,16 +96,18 @@ class IneatConseilDynamicBundleTest extends WebTestCase
         file_put_contents($tmpFile, $this->dumpAsYamlParameters($bundles));
 
         $kernel = $this->getTestKernel($cacheDir, $tmpFile);
-        $container = $kernel->getContainer();
-        $this->assertContains($this->acmeSimpleBundleFQDN, $container->getParameter('dynamic.bundles'));
-        $this->assertNotContains($this->acmeSimpleBundle2FQDN, $container->getParameter('dynamic.bundles'));
+        $bundleService = $kernel->getContainer()->get('dynamic_bundle_service');
+        /* @var $bundleService \IneatConseil\DynamicBundle\Services\DynamicBundleService */
+        
+        $this->assertContains($this->acmeSimpleBundleFQDN, $bundleService->getActivatedBundles());
+        $this->assertNotContains($this->acmeSimpleBundle2FQDN, $bundleService->getActivatedBundles());
         $kernel->shutdown();
 
         $bundles["dynamic.bundles"] = $this->acmeSimpleBundle2FQDN;
         file_put_contents($tmpFile, $this->dumpAsYamlParameters($bundles));
         $kernel = $this->getTestKernel($cacheDir, $tmpFile);
-        $container = $kernel->getContainer();
-        $this->assertContains($this->acmeSimpleBundle2FQDN, $container->getParameter('dynamic.bundles'));
+        $bundleService = $kernel->getContainer()->get('dynamic_bundle_service');
+        $this->assertContains($this->acmeSimpleBundle2FQDN, $bundleService->getActivatedBundles());
         $kernel->shutdown();
     }
 
