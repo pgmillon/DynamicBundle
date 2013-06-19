@@ -12,7 +12,10 @@ namespace {
             $bundles = array(
                 new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
                 new Symfony\Bundle\SecurityBundle\SecurityBundle(),
-                new Symfony\Bundle\TwigBundle\TwigBundle()
+                new Symfony\Bundle\TwigBundle\TwigBundle(),
+                new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle(),
+                new Sensio\Bundle\DistributionBundle\SensioDistributionBundle(),
+                new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle(),
             );
 
             return $bundles;

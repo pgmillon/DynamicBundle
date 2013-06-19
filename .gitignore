@@ -3,6 +3,7 @@ vendor/*
 
 # Netbeans directory
 nbproject
-/composer.lock
-/Tests/Fixtures/app/logs/
-/Tests/Fixtures/app/cache/
+composer.lock
+Tests/Fixtures/app/logs/
+Tests/Fixtures/app/cache/
+Tests/Fixtures/web/bundles/
