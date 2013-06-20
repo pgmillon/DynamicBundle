@@ -31,9 +31,16 @@ class DynamicBundleService
 
     public function getActivatedBundles()
     {
+//        $bundles = array();
+//        $dynamicBundles = $this->container->getParameter('dynamic.bundles');
+//        foreach ($this->container->getParameter('kernel.bundles') as $kernelBundle) {
+//            if(in_array($kernelBundle, $dynamicBundles)) {
+//                $bundles[] = $kernelBundle;
+//            }
+//        }
         return $this->container->getParameter('dynamic.bundles');
     }
-    
+
     public function getDynamicBundlesDir()
     {
         return $this->container->getParameter('dynamic.bundles_dir');
@@ -41,16 +48,16 @@ class DynamicBundleService
 
     public function getAvailableBundles()
     {
-        $bundles = [];
+        $bundles = array();
         $bundlesDir = $this->getDynamicBundlesDir();
         $filesystem = new Filesystem();
         $finder = new Finder();
         $finder->name('*Bundle.php')->in($bundlesDir);
-        foreach($finder as $file) {
+        foreach ($finder as $file) {
             /* @var $file \SplFileInfo */
             $className = $file->getBasename('.php');
             $relativePath = $filesystem->makePathRelative($file->getPath(), $bundlesDir);
-            $bundles[] = str_replace('/', '\\', trim($relativePath, '/')).'\\'.$className;
+            $bundles[] = str_replace('/', '\\', trim($relativePath, '/')) . '\\' . $className;
         }
         return $bundles;
     }

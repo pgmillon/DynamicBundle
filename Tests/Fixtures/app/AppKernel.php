@@ -22,7 +22,7 @@ namespace {
                 new IneatConseil\DynamicBundle\IneatConseilDynamicBundle(),
             );
 
-            return $bundles;
+            return $this->registerDynamicBundles($bundles);
         }
 
         public function registerContainerConfiguration(LoaderInterface $loader)

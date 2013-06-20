@@ -24,7 +24,7 @@ class IneatConseilDynamicBundleTest extends WebTestCase
      */
     protected $bundleService;
     protected $acmeSimpleBundleFQDN = 'Acme\SimpleBundle\AcmeSimpleBundle';
-    protected $acmeSimpleBundle2FQDN = 'Acme\SimpleBundle2\AcmeSimpleBundle2';
+    protected $acmeSimpleBundle2FQDN = 'Acme\Simple2Bundle\AcmeSimple2Bundle';
 
     protected function setUp()
     {
@@ -96,7 +96,7 @@ class IneatConseilDynamicBundleTest extends WebTestCase
     public function iCanAddADynamicBundle()
     {
         $bundles = [
-            "dynamic.bundles" => $this->getBundleService()->getActivatedBundles()
+            'dynamic.bundles' => $this->getBundleService()->getActivatedBundles()
         ];
 
         $cacheDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid(mt_rand());
@@ -113,7 +113,7 @@ class IneatConseilDynamicBundleTest extends WebTestCase
         $this->assertNotContains($this->acmeSimpleBundle2FQDN, $bundleService->getActivatedBundles());
         $kernel->shutdown();
 
-        $bundles["dynamic.bundles"] = $this->acmeSimpleBundle2FQDN;
+        $bundles['dynamic.bundles'][] = $this->acmeSimpleBundle2FQDN;
         file_put_contents($tmpFile, $this->dumpAsYamlParameters($bundles));
         $kernel = $this->getTestKernel($cacheDir, $tmpFile);
         $bundleService = $kernel->getContainer()->get('dynamic_bundle_service');
@@ -123,7 +123,7 @@ class IneatConseilDynamicBundleTest extends WebTestCase
 
     protected function dumpAsYamlParameters($params)
     {
-        return Yaml::dump(["parameters" => $params]);
+        return Yaml::dump(['parameters' => $params]);
     }
 
     protected function getTestKernel($cacheDir, $dynamicBundlesConfigurationFile)

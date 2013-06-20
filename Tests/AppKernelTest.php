@@ -47,7 +47,7 @@ class AppKernelTest extends DynamicAppKernel
             new \IneatConseil\DynamicBundle\IneatConseilDynamicBundle(),
         );
 
-        return $bundles;
+        return $this->registerDynamicBundles($bundles);
     }
 
     public function registerContainerConfiguration(\Symfony\Component\Config\Loader\LoaderInterface $loader)
