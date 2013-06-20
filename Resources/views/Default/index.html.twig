@@ -1,17 +1,11 @@
 {% extends "IneatConseilDynamicBundle::layout.html.twig" %}
 
 {% block body %}
-  {% trans %}Available bundles :{% endtrans %}
-  <ul>
-    {% for bundle in availableBundles %}
-      <li>{{ bundle }}</li>
-    {% endfor %}
-  </ul>
+  {{ form_start(form) }}
+      {{ form_errors(form) }}
 
-  {% trans %}Activated bundles :{% endtrans %}
-  <ul>
-    {% for bundle in activatedBundles %}
-      <li>{{ bundle }}</li>
-    {% endfor %}
-  </ul>
+      {{ form_row(form.bundles) }}
+
+      <input type="submit" />
+  {{ form_end(form) }}
 {% endblock %}

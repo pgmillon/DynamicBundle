@@ -15,6 +15,8 @@ use IneatConseil\DynamicBundle\Config\DynamicConfigCache;
 abstract class DynamicAppKernel extends Kernel
 {
     protected $dynamicBundlesConfigurationFile;
+    
+    protected $dynamicBundlesConfigurationOption = 'dynamic.bundles';
 
     public function __construct($environment, $debug)
     {
@@ -25,6 +27,11 @@ abstract class DynamicAppKernel extends Kernel
     public function getDynamicBundlesConfigurationFile()
     {
         return $this->dynamicBundlesConfigurationFile;
+    }
+    
+    public function getDynamicBundlesConfigurationOption()
+    {
+        return $this->dynamicBundlesConfigurationOption;
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
@@ -37,7 +44,8 @@ abstract class DynamicAppKernel extends Kernel
     public function registerDynamicBundles($bundles)
     {
         $content = Yaml::parse($this->getDynamicBundlesConfigurationFile());
-        $dynamicBundles = isset($content['parameters']['dynamic.bundles']) ? $content['parameters']['dynamic.bundles'] : array();
+        $option = $this->getDynamicBundlesConfigurationOption();
+        $dynamicBundles = isset($content['parameters'][$option]) ? $content['parameters'][$option] : array();
         foreach ($dynamicBundles as $bundleFQDN) {
             $bundles[] = new $bundleFQDN();
         }
