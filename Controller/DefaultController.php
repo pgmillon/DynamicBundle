@@ -20,7 +20,10 @@ class DefaultController extends Controller
     public function getBundleService()
     {
         if (is_null($this->bundleService)) {
-            $this->bundleService = $this->container->get('dynamic_bundle_service');
+            $kernel = $this->container->get('kernel');
+            /* @var $kernel \IneatConseil\DynamicBundle\HttpKernel\DynamicAppKernel */
+            
+            $this->bundleService = $this->container->get($kernel->getDynamicBundlesServiceName());
         }
         return $this->bundleService;
     }
@@ -63,7 +66,7 @@ class DefaultController extends Controller
     {
         $availableBundles = $this->getBundleService()->getAvailableBundles();
         $formBuilder = $this->createFormBuilder([
-                'bundles' => $this->getBundleService()->getActivatedBundles()
+                'bundles' => $this->getBundleService()->getActivatedBundlesFQDN()
             ])
             ->add('bundles', 'choice', [
             'choices' => array_combine($availableBundles, $availableBundles),

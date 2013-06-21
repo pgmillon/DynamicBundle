@@ -14,12 +14,12 @@ class DynamicConfigCache extends ConfigCache
 
     protected $file;
     
-    protected $dynamicBundlesConfigurationFile;
+    protected $kernel;
     
-    public function __construct($dynamicBundlesConfigurationFile, $file, $debug)
+    public function __construct($kernel, $file, $debug)
     {
         parent::__construct($file, $debug);
-        $this->dynamicBundlesConfigurationFile = $dynamicBundlesConfigurationFile;
+        $this->kernel = $kernel;
         $this->file = $file;
     }
     
@@ -27,12 +27,9 @@ class DynamicConfigCache extends ConfigCache
     {
         if (parent::isFresh()) {
             $time = filemtime($this->getFile());
-            foreach ($this->getMetadata() as $resource) {
-                /* @var $resource Symfony\Component\Config\Resource\ResourceInterface */
-                if($this->dynamicBundlesConfigurationFile === $resource->getResource()) {
-                    if (!$resource->isFresh($time)) {
-                        return false;
-                    }
+            foreach($this->getDynamicConfigurationFiles() as $configFile) {
+                if(filemtime($configFile) <= $time) {
+                    return false;
                 }
             }
             return true;
@@ -55,9 +52,20 @@ class DynamicConfigCache extends ConfigCache
         return $this->file;
     }
     
-    public function getDynamicBundlesConfigurationFile()
+    /**
+     * 
+     * @return \IneatConseil\DynamicBundle\HttpKernel\DynamicAppKernel
+     */
+    public function getKernel()
     {
-        return $this->dynamicBundlesConfigurationFile;
+        return $this->kernel;
+    }
+    
+    public function getDynamicConfigurationFiles()
+    {
+        return array(
+            $this->getKernel()->getDynamicBundlesConfigurationFile(),
+        );
     }
 
 }

@@ -4,6 +4,7 @@ namespace IneatConseil\DynamicBundle\HttpKernel;
 
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use IneatConseil\DynamicBundle\Config\DynamicConfigCache;
 
@@ -17,11 +18,13 @@ abstract class DynamicAppKernel extends Kernel
     protected $dynamicBundlesConfigurationFile;
     
     protected $dynamicBundlesConfigurationOption = 'dynamic.bundles';
+    
+    protected $dynamicBundlesServiceName = 'dynamic.service.bundle';
 
     public function __construct($environment, $debug)
     {
         parent::__construct($environment, $debug);
-        $this->dynamicBundlesConfigurationFile = $this->getRootDir() . '/config/dynamicBundles.yml';
+        $this->dynamicBundlesConfigurationFile = $this->getRootDir() . '/config/bundles.yml';
     }
 
     public function getDynamicBundlesConfigurationFile()
@@ -32,6 +35,11 @@ abstract class DynamicAppKernel extends Kernel
     public function getDynamicBundlesConfigurationOption()
     {
         return $this->dynamicBundlesConfigurationOption;
+    }
+
+    public function getDynamicBundlesServiceName()
+    {
+        return $this->dynamicBundlesServiceName;
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
@@ -61,7 +69,7 @@ abstract class DynamicAppKernel extends Kernel
     protected function initializeContainer()
     {
         $class = $this->getContainerClass();
-        $cache = new DynamicConfigCache($this->getDynamicBundlesConfigurationFile(), $this->getCacheDir() . '/' . $class . '.php', $this->debug);
+        $cache = new DynamicConfigCache($this, $this->getCacheDir() . '/' . $class . '.php', $this->debug);
         $fresh = true;
         if (!$cache->isFresh()) {
             $container = $this->buildContainer();

@@ -7,6 +7,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use IneatConseil\DynamicBundle\HttpKernel\DynamicAppKernel;
+use IneatConseil\DynamicBundle\Bundle\DynamicBundle;
 
 /**
  * Description of DynamicBundleService
@@ -49,14 +50,29 @@ class DynamicBundleService
         return $this->getKernel()->getDynamicBundlesConfigurationOption();
     }
 
+    public function getDynamicBundlesDir()
+    {
+        return $this->getContainer()->getParameter('dynamic.bundles_dir');
+    }
+
     public function getActivatedBundles()
     {
         $bundles = array();
-        $dynamicBundles = $this->getContainer()->getParameter($this->getDynamicBundlesOption());
-        foreach ($this->getContainer()->getParameter('kernel.bundles') as $kernelBundle) {
-            if(in_array($kernelBundle, $dynamicBundles)) {
-                $bundles[] = $kernelBundle;
+        foreach ($this->getKernel()->getBundles() as $bundle) {
+            if($bundle instanceof DynamicBundle) {
+                $bundles[] = $bundle;
             }
+        }
+        return $bundles;
+    }
+    
+    public function getActivatedBundlesFQDN()
+    {
+        $bundles = array();
+        foreach ($this->getActivatedBundles() as $kernelBundle) {
+            /* @var $kernelBundle Bundle */
+            $kernelBundleFQDN = $kernelBundle->getNamespace().'\\'.$kernelBundle->getName();
+            $bundles[] = $kernelBundleFQDN;
         }
         return $bundles;
     }
@@ -67,11 +83,6 @@ class DynamicBundleService
         file_put_contents($dynamicBundlesConfigurationFile, Yaml::dump(['parameters' => [
             $this->getDynamicBundlesOption() => $bundles
         ]]));
-    }
-
-    public function getDynamicBundlesDir()
-    {
-        return $this->getContainer()->getParameter('dynamic.bundles_dir');
     }
 
     public function getAvailableBundles()

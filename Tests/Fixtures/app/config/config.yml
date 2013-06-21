@@ -37,9 +37,4 @@ assetic:
         #    jar: %kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar
 
 parameters:
-    dynamic.bundles_dir: %kernel.root_dir%/dynamicBundles
-
-services:
-    dynamic_bundle_service:
-        class: IneatConseil\DynamicBundle\Services\DynamicBundleService
-        arguments: ["@service_container"]
+    router.class: IneatConseil\DynamicBundle\Routing\DynamicRouter

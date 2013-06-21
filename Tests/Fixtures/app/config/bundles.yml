@@ -1,0 +1,2 @@
+parameters:
+    dynamic.bundles: [Acme\SimpleBundle\AcmeSimpleBundle]

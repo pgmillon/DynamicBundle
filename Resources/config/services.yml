@@ -1,0 +1,8 @@
+parameters:
+    dynamic.service.bundle.class: IneatConseil\DynamicBundle\Services\DynamicBundleService
+    dynamic.bundles_dir: %kernel.root_dir%/bundles
+
+services:
+    dynamic.service.bundle:
+        class: %dynamic.service.bundle.class%
+        arguments: ["@service_container"]
