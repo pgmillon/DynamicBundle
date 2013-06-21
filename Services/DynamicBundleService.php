@@ -80,9 +80,9 @@ class DynamicBundleService
     public function setActivatedBundles($bundles)
     {
         $dynamicBundlesConfigurationFile = $this->getKernel()->getDynamicBundlesConfigurationFile();
-        file_put_contents($dynamicBundlesConfigurationFile, Yaml::dump(['parameters' => [
+        file_put_contents($dynamicBundlesConfigurationFile, Yaml::dump(array('parameters' => array(
             $this->getDynamicBundlesOption() => $bundles
-        ]]));
+        ))));
     }
 
     public function getAvailableBundles()

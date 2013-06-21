@@ -95,9 +95,9 @@ class IneatConseilDynamicBundleTest extends WebTestCase
      */
     public function iCanAddADynamicBundle()
     {
-        $bundles = [
+        $bundles = array(
             'dynamic.bundles' => $this->getBundleService()->getActivatedBundles()
-        ];
+        );
 
         $cacheDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid(mt_rand());
         $tmpFile = tempnam(sys_get_temp_dir(), '');
@@ -123,7 +123,7 @@ class IneatConseilDynamicBundleTest extends WebTestCase
 
     protected function dumpAsYamlParameters($params)
     {
-        return Yaml::dump(['parameters' => $params]);
+        return Yaml::dump(array('parameters' => $params));
     }
 
     protected function getTestKernel($cacheDir, $dynamicBundlesConfigurationFile)

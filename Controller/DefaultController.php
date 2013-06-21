@@ -65,14 +65,14 @@ class DefaultController extends Controller
     protected function getForm()
     {
         $availableBundles = $this->getBundleService()->getAvailableBundles();
-        $formBuilder = $this->createFormBuilder([
+        $formBuilder = $this->createFormBuilder(array(
                 'bundles' => $this->getBundleService()->getActivatedBundlesFQDN()
-            ])
-            ->add('bundles', 'choice', [
+            ))
+            ->add('bundles', 'choice', array(
             'choices' => array_combine($availableBundles, $availableBundles),
             'multiple' => true,
             'required' => false,
-        ]);
+        ));
         return $formBuilder->getForm();
     }
 }
