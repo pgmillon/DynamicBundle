@@ -22,7 +22,7 @@ class DefaultController extends Controller
         if (is_null($this->bundleService)) {
             $kernel = $this->container->get('kernel');
             /* @var $kernel \IneatConseil\DynamicBundle\HttpKernel\DynamicAppKernel */
-            
+
             $this->bundleService = $this->container->get($kernel->getDynamicBundlesServiceName());
         }
         return $this->bundleService;
@@ -54,7 +54,7 @@ class DefaultController extends Controller
             $data = $form->getData();
             $this->getBundleService()->setActivatedBundles($data['bundles']);
         }
-        
+
         return $this->redirect($this->generateUrl('ineatconseil_dynamicbundle_index'));
     }
 
@@ -71,6 +71,7 @@ class DefaultController extends Controller
             ->add('bundles', 'choice', [
             'choices' => array_combine($availableBundles, $availableBundles),
             'multiple' => true,
+            'required' => false,
         ]);
         return $formBuilder->getForm();
     }
