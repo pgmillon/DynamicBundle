@@ -28,7 +28,7 @@ class DynamicConfigCache extends ConfigCache
         if (parent::isFresh()) {
             $time = filemtime($this->getFile());
             foreach($this->getDynamicConfigurationFiles() as $configFile) {
-                if(filemtime($configFile) <= $time) {
+                if($time <= filemtime($configFile)) {
                     return false;
                 }
             }
